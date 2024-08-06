@@ -1,3 +1,56 @@
-.Weather {
-  border: 1px solid #dadada;
+.weather {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.weather form {
+  margin-bottom: 20px;
+}
+.weather .row {
+  margin-bottom: 10px;
+}
+
+.weather .form-control {
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+.weather .btn-primary {
+  height: 40px;
+  border-radius: 5px;
+}
+.weather h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.weather ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.weather ul li {
+  font-size: 18px;
+}
+.weather .col-6 img {
+  width: 100%;
+  max-width: 100px;
+}
+
+.weather .col-6 strong {
+  display: block;
+  font-size: 30px;
+  margin-top: 10px;
+}
+.weather .clickable {
+  cursor: pointer;
+  color: blue;
+}
+
+.weather .active {
+  font-weight: bold;
 }
