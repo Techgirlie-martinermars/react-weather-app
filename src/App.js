@@ -19,6 +19,7 @@ export default function App() {
           <a
             href="https://incredible-chebakia-5404ce.netlify.app/"
             target="_blank"
+            rel="noreferrer"
           >
             {""}
             Netlify
