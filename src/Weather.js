@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import DateDisplay from "./DateDisplay";
 import "./Weather.css";
 
 export default function Weather() {
@@ -20,7 +21,7 @@ export default function Weather() {
       setWeather({
         city: response.data.name,
         temperature: response.data.main.temp,
-        date: "Monday 08:00",
+
         description: response.data.weather[0].description,
 
         humidity: response.data.main.humidity,
