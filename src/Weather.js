@@ -6,7 +6,7 @@ import "./Weather.css";
 export default function Weather() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
-  const [unit, setUnit] = useState("metric"); // "metric" for Celsius, "imperial" for Fahrenheit
+  const [unit, setUnit] = useState("metric");
 
   const handleCityChange = (event) => {
     setCity(event.target.value);
@@ -27,6 +27,7 @@ export default function Weather() {
         humidity: response.data.main.humidity,
         wind: response.data.wind.speed,
         icon: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`,
+        date: new Date(response.data.dt * 1000),
       });
     });
   };
@@ -46,6 +47,7 @@ export default function Weather() {
             humidity: response.data.main.humidity,
             wind: response.data.wind.speed,
             icon: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`,
+            date: new Date(response.data.dt * 1000),
           });
         });
       }
@@ -102,6 +104,7 @@ export default function Weather() {
             </div>
             <div className="col-6">
               <ul>
+                <DateDisplay date={weather.date} />
                 <li>Humidity: {weather.humidity}%</li>
                 <li>
                   Wind: {weather.wind} {unit === "metric" ? "m/s" : "mph"}
