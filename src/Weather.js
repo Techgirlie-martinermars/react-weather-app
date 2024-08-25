@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import DateDisplay from "./DateDisplay";
+import WeatherForecast from "./WeatherForecast";
 import "./Weather.css";
 
 export default function Weather() {
@@ -101,6 +102,7 @@ export default function Weather() {
                   F
                 </span>
               </strong>
+              <WeatherForecast />
             </div>
             <div className="col-6">
               <ul>
