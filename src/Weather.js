@@ -4,10 +4,25 @@ import DateDisplay from "./DateDisplay";
 import WeatherForecast from "./WeatherForecast";
 import "./Weather.css";
 
-export default function Weather() {
-  const [city, setCity] = useState("");
-  const [weather, setWeather] = useState(null);
+export default function Weather(props) {
+  const [weatherData, setWeatherData] = useState({ ready: false });
+  const [city, setCity] = useState(props.defaultCity);
   const [unit, setUnit] = useState("metric");
+
+  function handleResponse(response) {
+    setWeatherData({
+      ready: true,
+      coordinates: response.data.coordinates,
+      temperature: response.data.temperature.current,
+      humidity: response.data.temperature.humidity,
+      date: new Date(response.data.time * 1000),
+      description: response.data.condition.description,
+      icon_url: `https://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`,
+      wind: response.data.wind.speed,
+      city: response.data.city,
+      condition: response.data.condition,
+    });
+  }
 
   const handleCityChange = (event) => {
     setCity(event.target.value);
@@ -19,7 +34,7 @@ export default function Weather() {
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
 
     axios.get(apiUrl).then((response) => {
-      setWeather({
+      setWeatherData({
         city: response.data.name,
         temperature: response.data.main.temp,
 
@@ -36,12 +51,12 @@ export default function Weather() {
   const handleUnitChange = (newUnit) => {
     if (unit !== newUnit) {
       setUnit(newUnit);
-      if (weather) {
+      if (weatherData) {
         const apiKey = "7f9683b5472584ac4ff49bee2b0bc129";
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${weather.city}&appid=${apiKey}&units=${newUnit}`;
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.city}&appid=${apiKey}&units=${newUnit}`;
 
         axios.get(apiUrl).then((response) => {
-          setWeather({
+          setWeatherData({
             city: response.data.name,
             temperature: response.data.main.temp,
             description: response.data.weather[0].description,
@@ -77,17 +92,17 @@ export default function Weather() {
           </div>
         </div>
       </form>
-      {weather && (
+      {weatherData && (
         <>
-          <h1>{weather.city}</h1>
+          <h1>{weatherData.city}</h1>
           <ul>
-            <li>{weather.description}</li>
+            <li>{weatherData.description}</li>
           </ul>
           <div className="row">
             <div className="col-6">
-              <img src={weather.icon} alt={weather.description} />
+              <img src={weatherData.icon} alt={weatherData.description} />
               <strong>
-                {Math.round(weather.temperature)}°{" "}
+                {Math.round(weatherData.temperature)}°{" "}
                 <span
                   className={unit === "metric" ? "active" : "clickable"}
                   onClick={() => handleUnitChange("metric")}
@@ -106,10 +121,10 @@ export default function Weather() {
             </div>
             <div className="col-6">
               <ul>
-                <DateDisplay date={weather.date} />
-                <li>Humidity: {weather.humidity}%</li>
+                <DateDisplay date={weatherData.date} />
+                <li>Humidity: {weatherData.humidity}%</li>
                 <li>
-                  Wind: {weather.wind} {unit === "metric" ? "m/s" : "mph"}
+                  Wind: {weatherData.wind} {unit === "metric" ? "m/s" : "mph"}
                 </li>
               </ul>
             </div>
