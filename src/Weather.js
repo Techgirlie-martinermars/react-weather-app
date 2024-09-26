@@ -12,15 +12,14 @@ export default function Weather(props) {
   function handleResponse(response) {
     setWeatherData({
       ready: true,
-      coordinates: response.data.coordinates,
-      temperature: response.data.temperature.current,
-      humidity: response.data.temperature.humidity,
-      date: new Date(response.data.time * 1000),
-      description: response.data.condition.description,
-      icon_url: `https://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`,
+      city: response.data.name,
+      temperature: response.data.main.temp,
+      coordinates: response.data.coord,
+      description: response.data.weather[0].description,
+      humidity: response.data.main.humidity,
       wind: response.data.wind.speed,
-      city: response.data.city,
-      condition: response.data.condition,
+      icon: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`,
+      date: new Date(response.data.dt * 1000),
     });
   }
 
@@ -33,19 +32,7 @@ export default function Weather(props) {
     const apiKey = "7f9683b5472584ac4ff49bee2b0bc129";
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
 
-    axios.get(apiUrl).then((response) => {
-      setWeatherData({
-        city: response.data.name,
-        temperature: response.data.main.temp,
-
-        description: response.data.weather[0].description,
-
-        humidity: response.data.main.humidity,
-        wind: response.data.wind.speed,
-        icon: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`,
-        date: new Date(response.data.dt * 1000),
-      });
-    });
+    axios.get(apiUrl).then(handleResponse);
   };
 
   const handleUnitChange = (newUnit) => {
@@ -55,17 +42,7 @@ export default function Weather(props) {
         const apiKey = "7f9683b5472584ac4ff49bee2b0bc129";
         const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.city}&appid=${apiKey}&units=${newUnit}`;
 
-        axios.get(apiUrl).then((response) => {
-          setWeatherData({
-            city: response.data.name,
-            temperature: response.data.main.temp,
-            description: response.data.weather[0].description,
-            humidity: response.data.main.humidity,
-            wind: response.data.wind.speed,
-            icon: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`,
-            date: new Date(response.data.dt * 1000),
-          });
-        });
+        axios.get(apiUrl).then(handleResponse);
       }
     }
   };
@@ -92,7 +69,7 @@ export default function Weather(props) {
           </div>
         </div>
       </form>
-      {weatherData && (
+      {weatherData.ready && (
         <>
           <h1>{weatherData.city}</h1>
           <ul>
@@ -117,7 +94,7 @@ export default function Weather(props) {
                   F
                 </span>
               </strong>
-              <WeatherForecast />
+              <WeatherForecast coordinates={weatherData.coordinates} />
             </div>
             <div className="col-6">
               <ul>
